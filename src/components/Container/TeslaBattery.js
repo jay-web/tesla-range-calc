@@ -8,7 +8,7 @@ const TeslaBattery = () => {
     return (
         <form className="tesla-battery">
             <h1>Range Per Charge</h1>
-            <TeslaCar />
+            <TeslaCar wheelsize={19}/>
             <TeslaNotice />
         </form>
     )
