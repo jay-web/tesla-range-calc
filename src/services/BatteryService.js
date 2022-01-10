@@ -1,6 +1,6 @@
 
-export const BatteryService = {
-  
+export function getModelData() {
+    return {
       '60': {
         19: {
           on: {
@@ -1285,5 +1285,6 @@ export const BatteryService = {
           }
         }
       }
+    }
     };
   
