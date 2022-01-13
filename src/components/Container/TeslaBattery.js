@@ -3,6 +3,8 @@ import { getModelData } from "../../services/BatteryService";
 import "./TeslaBattery.css";
 import TeslaCar from "../TeslaCar/TeslaCar";
 import TeslaStats from "../TeslaStats/TeslaStats";
+import TeslaClimate from "../TeslaClimate/Teslaclimate";
+import TeslaWheels from "../TeslaWheels/TeslaWheels";
 import TeslaNotice from "../TeslaNotice/TeslaNotice";
 import TeslaCounter from "../TeslaCounter/TeslaCounter";
 
@@ -45,30 +47,32 @@ const TeslaBattery = (props) => {
   }, [carModels, config]);
 
   const updateCounterState = (title, value) => {
-    const copyOfConfig = {...config};
+    const copyOfConfig = { ...config };
 
-    title == 'Speed' ? copyOfConfig.speed = value : copyOfConfig.temperature = value;
+    title == "Speed"
+      ? (copyOfConfig.speed = value)
+      : (copyOfConfig.temperature = value);
 
     setConfig(copyOfConfig);
-  }
+  };
 
   const increment = (e, title) => {
     e.preventDefault();
     let currentValue, maxValue, step;
-    const {speed, temperature } = props.defaultValues;
-    if(title == "Speed"){
-        currentValue = config.speed;
-        maxValue = speed.max;
-        step = speed.step;
-    }else{
-        currentValue = config.temperature;
-        maxValue = temperature.max;
-        step = temperature.step;
+    const { speed, temperature } = props.defaultValues;
+    if (title == "Speed") {
+      currentValue = config.speed;
+      maxValue = speed.max;
+      step = speed.step;
+    } else {
+      currentValue = config.temperature;
+      maxValue = temperature.max;
+      step = temperature.step;
     }
 
-    if(currentValue < maxValue){
-        const newValue = currentValue + step;
-        updateCounterState(title, newValue);
+    if (currentValue < maxValue) {
+      const newValue = currentValue + step;
+      updateCounterState(title, newValue);
     }
   };
 
@@ -76,23 +80,33 @@ const TeslaBattery = (props) => {
     e.preventDefault();
     let currentValue, minValue, step;
     const { speed, temperature } = props.defaultValues;
-    if(title == "Speed"){
+    if (title == "Speed") {
       currentValue = config.speed;
       minValue = speed.min;
       step = speed.step;
-    }else{
+    } else {
       currentValue = config.temperature;
       minValue = temperature.min;
       step = temperature.step;
     }
 
-    if(currentValue > minValue){
+    if (currentValue > minValue) {
       const newValue = currentValue - step;
       updateCounterState(title, newValue);
-
     }
-      
-  };
+  }; 
+
+  const handleClimateChange = () => {
+      let copyOfConfig = {...config};
+      copyOfConfig.climate = !config.climate;
+      setConfig(copyOfConfig);
+  }
+
+  const handleWheelChange = (size) => {
+    let copyOfConfig = {...config}
+    copyOfConfig.wheels = size;
+    setConfig(copyOfConfig);
+  }
 
   return (
     <form className="tesla-battery">
@@ -107,15 +121,24 @@ const TeslaBattery = (props) => {
           decrement={decrement}
         />
         <div className="tesla-climate-container cf">
-        
-        <TeslaCounter
-          currentValue={config.temperature}
-          initValues={props.defaultValues.temperature}
-          increment={increment}
-          decrement={decrement}
-        />
-            
-            </div>
+          <TeslaCounter
+            currentValue={config.temperature}
+            initValues={props.defaultValues.temperature}
+            increment={increment}
+            decrement={decrement}
+          />
+            <TeslaClimate 
+            value={config.climate}
+            limit={config.temperature > 10}
+            handleClimateChange={handleClimateChange}
+          />
+         
+        </div>
+        <TeslaWheels 
+            value={config.wheels}
+            handleWheelChange={handleWheelChange}
+            />
+      
       </div>
       <TeslaNotice />
     </form>
