@@ -42,6 +42,8 @@ const TeslaBattery = (props) => {
     });
   };
 
+ 
+
   useEffect(() => {
     setCarstats(calculateStats(carModels, config));
   }, [carModels, config]);
